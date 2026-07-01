@@ -26,7 +26,14 @@ jobs:
         pip install "buildozer>=1.5.0" "cython<3.0.0"
 
     - name: Build with Buildozer
+      env:
+        # هذه المتغيرات تمنع بيئة الأندرويد من طلب مدخلات تفاعلية تفشل السيرفر
+        APP_ALLOW_INTERACTIVE: "0"
+        TERM: xterm
       run: |
+        # قبول رخص أندرويد مسبقاً وتمريرها مباشرة لبناء صامت ومستقر
+        mkdir -p ~/.android
+        touch ~/.android/repositories.cfg
         yes | buildozer -v android debug
 
     - name: Upload APK Artifact
