@@ -35,6 +35,7 @@ fullscreen = 1
 android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE, MODIFY_AUDIO_SETTINGS
 
 # (int) Target Android API, should be as high as possible.
+# (int) Target Android API, should be as high as possible.
 android.api = 33
 
 # (int) Minimum API your APK will support.
@@ -43,10 +44,10 @@ android.minapi = 21
 # (int) Android NDK API to use
 android.ndk_api = 21
 
-# (str) Android NDK version to use (موصى به للاستقرار مع البيئة الحالية)
-android.ndk = 
+# (str) إصدار الـ NDK الصحيح الذي تحتاجه الأداة بدقة لمنع انهيار الـ AttributeError
+android.ndk = 25b
 
-# (str) The Android bootstrapper to use (ضروري لتطبيقات Kivy/KivyMD الساقطة على بيئة SDL2)
+# (str) الـ Bootstrap الخاص بـ Kivy
 p4a.bootstrap = sdl2
 
 # (bool) If True, then skip trying to update the Android sdk automatically
