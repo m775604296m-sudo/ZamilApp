@@ -22,13 +22,13 @@ jobs:
       run: |
         sudo apt-get update
         
-        # تثبيت حزم الدعم الأساسية وحل مشكلة تعارض الاعتماديات المكسورة
+        # تثبيت حزمة libunwind لمنع تعارض مكاتب الوسائط
         sudo apt-get install -y libunwind-dev
         
-        # تثبيت أدوات بناء الأندرويد و Kivy المستقرة
+        # تثبيت أدوات البناء مع OpenJDK 11 لضمان عمل sdkmanager بدون مشاكل توافق
         sudo apt-get install -y build-essential ccache git libffi-dev libssl-dev \
-          openjdk-17-jdk autoconf automake libtool m4 pkg-config libltdl-dev \
-          zip unzip
+          openjdk-11-jdk autoconf automake libtool m4 pkg-config libltdl-dev \
+          zip unzip autotools-dev
         
         pip install --upgrade pip
         pip install "buildozer>=1.5.0" "cython<3.0.0"
@@ -39,21 +39,16 @@ jobs:
         TERM: xterm
         ACLOCAL_PATH: "/usr/share/aclocal"
       run: |
-        # تهيئة ملفات رخص الأندرويد
+        # تهيئة مسارات رخص الأندرويد
         mkdir -p ~/.android
         touch ~/.android/repositories.cfg
         
-        # تنظيف الكاش القديم لضمان تجميع نظيف تماماً
+        # تنظيف الكاش القديم تماماً لتهيئة الـ SDK النظيف
         echo "Clearing global caches..."
         rm -rf ~/.buildozer/
-        rm -rf ~/.local/share/python-for-android/
+        rm -rf .buildozer/
         
-        # خطوة حاسمة: الموافقة المسبقة والصامتة على رخص Android SDK منعاً لتعليق الطرفية
-        mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
-        echo -e "89354d86f5b6378bd29d15220ee14c53021975b1\n24333f1a63b6825ea9c5514f83c2829b004d1fee\n84831b9409646a918e30573bab4c9c91346d8ec1" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
-        echo -e "84931b71126b7447a79a9e14304c4c1926d4c022" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-preview-license
-        
-        # تشغيل البناء بشكل مباشر وصارم بدون أوامر تفاعلية (تمت إزالة yes |)
+        # تشغيل البناء مباشرة ودع بيلدوزر يجلب الـ SDKManager المتوافق تلقائياً
         buildozer -v android debug
 
     - name: Upload APK Artifact
