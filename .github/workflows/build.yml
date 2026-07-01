@@ -21,11 +21,14 @@ jobs:
     - name: Install System Dependencies
       run: |
         sudo apt-get update
+        
+        # تثبيت حزم الدعم الأساسية وحل مشكلة تعارض الاعتماديات المكسورة
+        sudo apt-get install -y libunwind-dev
+        
+        # تثبيت أدوات بناء الأندرويد و Kivy المستقرة
         sudo apt-get install -y build-essential ccache git libffi-dev libssl-dev \
-          libgstreamer1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
-          gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav \
-          libgstreamer-plugins-base1.0-dev libasound2-dev openjdk-17-jdk \
-          autoconf automake libtool m4 autotools-dev pkg-config libltdl-dev
+          openjdk-17-jdk autoconf automake libtool m4 pkg-config libltdl-dev \
+          zip unzip
         
         pip install --upgrade pip
         pip install "buildozer>=1.5.0" "cython<3.0.0"
@@ -40,10 +43,10 @@ jobs:
         mkdir -p ~/.android
         touch ~/.android/repositories.cfg
         
-        # تنظيف كاش التجميع الشامل للنظام لضمان عدم استدعاء مكاتب معطوبة
-        echo "Forcing global buildozer and p4a clean..."
+        # تنظيف الكاش القديم لضمان تجميع نظيف تماماً
+        echo "Clearing global caches..."
         rm -rf ~/.buildozer/
-        rm -rf ~\.local/share/python-for-android/
+        rm -rf ~/.local/share/python-for-android/
         
         # تشغيل البناء مع الموافقة التلقائية
         yes | buildozer -v android debug
