@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout code
@@ -25,7 +25,7 @@ jobs:
           libgstreamer1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
           gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav \
           libgstreamer-plugins-base1.0-dev libasound2-dev openjdk-17-jdk \
-          autoconf automake libtool m4 autotools-dev pkg-config
+          autoconf automake libtool m4 autotools-dev pkg-config libltdl-dev
         
         pip install --upgrade pip
         pip install "buildozer>=1.5.0" "cython<3.0.0"
@@ -34,17 +34,17 @@ jobs:
       env:
         APP_ALLOW_INTERACTIVE: "0"
         TERM: xterm
+        ACLOCAL_PATH: "/usr/share/aclocal"
       run: |
         # تهيئة ملفات رخص الأندرويد
         mkdir -p ~/.android
         touch ~/.android/repositories.cfg
         
-        # خطوة حاسمة: تنظيف أي بقايا أو كاش قديم تسبب في تعليق البناء
-        if [ -d ".buildozer" ]; then
-          echo "Cleaning up old buildozer cache..."
-          buildozer android clean
-        fi
-
+        # تنظيف كاش التجميع الشامل للنظام لضمان عدم استدعاء مكاتب معطوبة
+        echo "Forcing global buildozer and p4a clean..."
+        rm -rf ~/.buildozer/
+        rm -rf ~\.local/share/python-for-android/
+        
         # تشغيل البناء مع الموافقة التلقائية
         yes | buildozer -v android debug
 
