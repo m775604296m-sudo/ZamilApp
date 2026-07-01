@@ -44,10 +44,10 @@ android.minapi = 21
 android.ndk_api = 21
 
 # (str) Android NDK version to use (موصى به للاستقرار مع البيئة الحالية)
-android.ndk = 25b
+android.ndk = 
 
 # (str) The Android bootstrapper to use (ضروري لتطبيقات Kivy/KivyMD الساقطة على بيئة SDL2)
-android.bootstrap = sdl2
+p4a.bootstrap = sdl2
 
 # (bool) If True, then skip trying to update the Android sdk automatically
 android.skip_update = False
